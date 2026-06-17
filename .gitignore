@@ -1,0 +1,10 @@
+# MSW read-only directories (no need to track)
+Environment/
+Global/
+
+# Claude Code internal
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
