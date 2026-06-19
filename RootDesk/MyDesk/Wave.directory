@@ -1,0 +1,23 @@
+{
+  "Id": "",
+  "GameId": "",
+  "EntryKey": "directory://e5fa8d0e48f04408ba7c8076eabfafc8",
+  "ContentType": "x-mod/directory",
+  "Content": "",
+  "Usage": 0,
+  "UsePublish": 1,
+  "UseService": 0,
+  "CoreVersion": "26.5.0.0",
+  "StudioVersion": "0.1.0.0",
+  "DynamicLoading": 0,
+  "ContentProto": {
+    "Use": "Json",
+    "Json": {
+      "entry_id": "directory://e5fa8d0e48f04408ba7c8076eabfafc8",
+      "name": "Wave",
+      "lock": false,
+      "folding": false,
+      "nameEditable": true
+    }
+  }
+}

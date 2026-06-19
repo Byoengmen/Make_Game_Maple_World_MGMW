@@ -114,14 +114,17 @@ Wave 시작
 | Phase | 이름 | 상태 |
 |---|---|---|
 | 0 | 방향 결정 | ✅ 완료 (M0 달성 2026-06-17) |
-| 1 | 코어 시스템 | 🔄 진행 예정 |
+| 1 | 코어 시스템 | 🔄 진행 중 |
 | 2 | 콘텐츠 확장 | ⏳ 대기 |
 | 3 | 완성도 | ⏳ 대기 |
 | 4 | 출시 준비 | ⏳ 대기 |
 
 ### 현재 Phase 1 — 구현 목표
-- [ ] 웨이브 시스템 (모험가 스폰, Wave 카운트, 정비 페이즈 전환)
-- [ ] 모험가 AI 전사 타입 (기준 타입, 나머지 4종은 이후 추가)
+- [x] 웨이브 시스템 — WaveManager.mlua 완성 (동작 확인)
+- [x] 모험가 공통 베이스 — AdventurerBase.mlua 완성 (빌드 통과)
+- [x] 모험가 AI 전사 스크립트 — AdventurerWarrior.mlua 완성 (빌드 통과)
+- [ ] 모험가 .model 파일 생성 및 맵 배치 ← 다음 세션
+- [ ] WaveManager 스폰 연결 ← 다음 세션
 - [ ] 재화 시스템 (처치 → 재화 적립, HUD 표시)
 - [ ] 중간 정비 UI (스탯강화 / 아이템뽑기 화면)
 - [ ] 모험가 AI 나머지 4종 (궁수, 도적, 법사, 해적)
@@ -143,12 +146,15 @@ _현재 없음. 발생 시 이곳에 기록._
 ├── RULES.md               ← 협업 규칙 전문
 │
 ├── RootDesk/MyDesk/
-│   ├── Monster.mlua       ← 몬스터 HP/피격/사망/리스폰 컴포넌트
-│   ├── MonsterAttack.mlua ← 몬스터 공격 컴포넌트
-│   ├── PlayerAttack.mlua  ← 플레이어 공격 (데미지 50, 치명타 30%/2배)
-│   ├── PlayerHit.mlua     ← 플레이어 피격 (무적시간 1초)
-│   ├── UIPopup.mlua       ← 확인/취소 팝업 (트윈 애니메이션)
-│   └── UIToast.mlua       ← 토스트 메시지 (페이드 인/아웃)
+│   ├── Wave/
+│   │   └── WaveManager.mlua       ← 웨이브 총괄 (카운트/스폰신호/정비전환/클리어판정)
+│   ├── Adventurer/
+│   │   ├── AdventurerBase.mlua    ← 모험가 공통 (HP/피격/사망/WaveManager연동)
+│   │   └── AdventurerWarrior.mlua ← 전사 AI (플레이어추적/근접공격)
+│   ├── Player/                    ← 다음 세션 예정
+│   ├── System/                    ← 다음 세션 예정
+│   └── UI/                        ← 다음 세션 예정
+│   (구 파일 Monster.mlua 등은 이번 게임과 무관 — 미사용)
 │
 ├── map/
 │   └── map01.map          ← 메인 맵 (MapleTile 사이드뷰)
@@ -163,15 +169,23 @@ _현재 없음. 발생 시 이곳에 기록._
 
 ## 마지막 작업
 
-- **날짜**: 2026-06-17
+- **날짜**: 2026-06-19
 - **작업 내용**:
-  1. 워크프레임 구축 (FRAMEWORK.md 생성)
-  2. 게임 컨셉 확정 — M0 달성
-  3. 협업 규칙 합의 (RULES.md 생성, 규칙 3-1 ~ 3-9, 총 9개 카테고리)
-  4. GAME_CONTEXT.md 메타데이터 보강 (크로스 디바이스 연속성 기준 적용)
-  5. 규칙 3-9 추가 (파일 수정 전 완성본 전시 + 허가 후 진행)
-- **변경된 파일**: GAME_CONTEXT.md, FRAMEWORK.md, RULES.md (신규)
-- **다음 할 일**: Phase 1 시작 — 웨이브 시스템 구현 (사용자가 코드 작성 주도, Claude 조언)
+  1. Phase 1 시작 — 스크립트 구조 설계 (서브폴더 방식 확정)
+  2. WaveManager.mlua 작성 완료 및 동작 확인 (Play 로그 검증)
+  3. AdventurerBase.mlua 작성 완료 (빌드 통과)
+  4. AdventurerWarrior.mlua 작성 완료 (빌드 통과)
+  5. LIA-1114/1115 false positive 경고 확인 (실제 에러 아님)
+- **변경된 파일**:
+  - `RootDesk/MyDesk/Wave/WaveManager.mlua` (신규)
+  - `RootDesk/MyDesk/Adventurer/AdventurerBase.mlua` (신규)
+  - `RootDesk/MyDesk/Adventurer/AdventurerWarrior.mlua` (신규)
+  - `GAME_CONTEXT.md` (업데이트)
+- **다음 할 일**:
+  1. 모험가 `.model` 파일 생성 (`Models/Adventurer/Warrior.model`)
+  2. map01에 전사 엔티티 배치 (AdventurerBase + AdventurerWarrior 컴포넌트 부착)
+  3. WaveManager에 스폰 로직 연결
+  4. 실제 전사가 플레이어를 추적하는 동작 확인
 
 ---
 

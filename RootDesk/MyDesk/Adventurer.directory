@@ -1,0 +1,23 @@
+{
+  "Id": "",
+  "GameId": "",
+  "EntryKey": "directory://dc4822a8e12648dc99bf9661ff1eb969",
+  "ContentType": "x-mod/directory",
+  "Content": "",
+  "Usage": 0,
+  "UsePublish": 1,
+  "UseService": 0,
+  "CoreVersion": "26.5.0.0",
+  "StudioVersion": "0.1.0.0",
+  "DynamicLoading": 0,
+  "ContentProto": {
+    "Use": "Json",
+    "Json": {
+      "entry_id": "directory://dc4822a8e12648dc99bf9661ff1eb969",
+      "name": "Adventurer",
+      "lock": false,
+      "folding": false,
+      "nameEditable": true
+    }
+  }
+}

@@ -1,0 +1,65 @@
+@Component
+script AdventurerWarrior extends Component
+
+	property number ATTACK_DAMAGE = 10.0
+
+	property number ATTACK_RANGE = 1.5
+
+	property number ATTACK_COOLDOWN = 1.5
+
+	property number MOVE_SPEED = 3.0
+
+	property number attackTimer = 0.0
+
+	property boolean isActive = false
+
+	@ExecSpace("ServerOnly")
+	method void OnBeginPlay()
+		    self.isActive = true
+		    self.attackTimer = 0.0
+		    log("전사 모험가 활성화")
+	end
+
+	@ExecSpace("ServerOnly")
+	method void OnUpdate(number delta)
+		    if not self.isActive then return end
+		
+		    -- 죽은 상태면 중단
+		    local base = self.Entity:GetComponent("script.AdventurerBase")
+		    if not isvalid(base) or base.isDead then return end
+		
+		    -- 플레이어(몬스터) 찾기
+		    local map = self.Entity.CurrentMap
+		    local users = _UserService:GetUsersByMapComponent(map.MapComponent)
+		    if users == nil or #users == 0 then return end
+		    local player = users[1]
+		    if not isvalid(player) then return end
+		
+		    -- 거리 계산
+		    local myPos = self.Entity.TransformComponent.WorldPosition
+		    local playerPos = player.TransformComponent.WorldPosition
+		    local diff = playerPos - myPos
+		    local distance = diff.magnitude
+		
+		    -- 공격 범위 밖이면 이동
+		    if distance > self.ATTACK_RANGE then
+		        local dir = Vector2(diff.x, 0).normalized
+		        self.Entity.MovementComponent:MoveToDirection(dir, self.MOVE_SPEED)
+		    else
+		        -- 공격 범위 안 → 이동 멈추고 공격
+		        self.Entity.MovementComponent:MoveToDirection(Vector2(0, 0), 0)
+		        self.attackTimer = self.attackTimer - delta
+		        if self.attackTimer <= 0 then
+		            self:AttackPlayer(player)
+		            self.attackTimer = self.ATTACK_COOLDOWN
+		        end
+		    end
+	end
+
+	@ExecSpace("ServerOnly")
+	method void AttackPlayer(Entity player)
+		    log("전사가 플레이어를 공격! 데미지: " .. self.ATTACK_DAMAGE)
+		    -- TODO: player:GetComponent("script.PlayerMonster"):TakeDamage(self.ATTACK_DAMAGE)
+	end
+
+end

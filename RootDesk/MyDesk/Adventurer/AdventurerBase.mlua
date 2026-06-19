@@ -1,0 +1,55 @@
+@Component
+script AdventurerBase extends Component
+
+	property number MAX_HP = 100.0
+
+	property number moveSpeed = 3.0
+
+	property number currentHp = 0.0
+
+	property boolean isDead = false
+
+	@ExecSpace("ServerOnly")
+	method void OnBeginPlay()
+		    -- HP 초기화
+		    self.currentHp = self.MAX_HP
+		    log("모험가 스폰 HP: " .. self.currentHp)
+		
+		    -- WaveManager에 스폰 알림
+		    local waveManager = self.Entity.CurrentMap:GetComponent("script.WaveManager")
+		    if isvalid(waveManager) then
+		        waveManager:OnAdventurerSpawned()
+		    end
+	end
+
+	@ExecSpace("ServerOnly")
+	method void TakeDamage(number damage)
+		    -- 이미 죽은 경우 무시
+		    if self.isDead then return end
+		
+		    self.currentHp = self.currentHp - damage
+		    log("모험가 피격 / 남은 HP: " .. self.currentHp)
+		
+		    if self.currentHp <= 0 then
+		        self:Die()
+		    end
+	end
+
+	@ExecSpace("ServerOnly")
+	method void Die()
+		    -- 중복 사망 방지
+		    if self.isDead then return end
+		    self.isDead = true
+		    log("모험가 사망")
+		
+		    -- WaveManager에 사망 알림
+		    local waveManager = self.Entity.CurrentMap:GetComponent("script.WaveManager")
+		    if isvalid(waveManager) then
+		        waveManager:OnAdventurerDead()
+		    end
+		
+		    -- 엔티티 제거 (1초 후)
+		    self.Entity:Destroy(1.0)
+	end
+
+end
